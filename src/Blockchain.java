@@ -11,21 +11,19 @@ public class Blockchain
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
     private int i=0;
     private int j=0;
-    int unconfirmedTransactions[]=new int[1000];
-    Block Chain[]=new Block[1000];
+    public int unconfirmedTransactions[]=new int[1000];
+    public Block Chain[]=new Block[1000];
     String previousHash;
 
-    public String computedifficultyString()
+    public String computedDifficultyString()
     {
-        int temp=difficulty;
-        while (temp>=0)
+        while (temp>0)
         {
             difficultyString = difficultyString + "0";
+            temp--;
         }
         return difficultyString;
     }
-
-
 
     public void createGenesisBlock()
     {
@@ -47,14 +45,19 @@ public class Blockchain
 
     String proofOfWork(Block block)
     {
-        String difficultyString=computedifficultyString();
+        String difficultyString=computedDifficultyString();
         block.nonce=0;
         String computedHash=Block.computeHash(block);
-        while(difficultyString!=computedHash.substring(0,difficulty-1));
+
+        while(true)
         {
+            if (difficultyString.equals(computedHash.substring(0, difficulty))) break;
+            System.out.println("run");
             block.nonce++;
             computedHash=Block.computeHash(block);
+            System.out.println(computedHash);
         }
+
         return computedHash;
     }
 
