@@ -3,26 +3,28 @@ import com.google.gson.GsonBuilder;
 
 public class Block {
 
-    private int index;
+    public int index;
     private String timeStamp;
+    private int Transaction;
 
     public String getPreviousHash() {
         return previousHash;
     }
 
-    private String previousHash;
-    private int nonce;
+    public String previousHash;
+    public int nonce;
+    public String hash;
 
-    public Block(int index, String timeStamp, String previousHash, int nonce) {
+
+    public Block(int index, String timeStamp, String previousHash, int nonce, int Transaction) {
         this.index = index;
         this.timeStamp = timeStamp;
         this.previousHash = previousHash;
         this.nonce = nonce;
+        this.Transaction = Transaction;
     }
 
-
-
-    public static String computeHash(Block block){
+    public static String computeHash(Block block) {
 
         GsonBuilder builder = new GsonBuilder();
         builder.setPrettyPrinting();
@@ -30,5 +32,4 @@ public class Block {
 
         return Hash.getSHAString(gson.toJson(block));
     }
-
 }
