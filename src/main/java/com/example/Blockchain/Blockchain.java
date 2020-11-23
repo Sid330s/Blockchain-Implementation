@@ -1,3 +1,5 @@
+package com.example.Blockchain;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,6 +33,8 @@ public class Blockchain
         String previousHash = getLastBlock().getHash();
         if (previousHash != block.getPreviousHash())
             return false;
+
+        if (! this.isValidProof(block, proof)) return false;
 
         block.setHash(proof);
         chain.add(block);
@@ -77,17 +81,32 @@ public class Blockchain
         }
     }
 
+    boolean isValidProof(Block block, String blockHash){
+        return (difficultyString.equals(blockHash.substring(0, difficulty)) &&
+        blockHash == block.computeHash(block));
+    }
+
+    boolean checkChainValidity(ArrayList<Block> chain){
+        String previousHash = "Genesis";
+        for (Block block : chain) {
+            String blockHash = block.getHash();
+            //delattr(block, "hash")
+            if ( ! this.isValidProof(block, blockHash) || previousHash != block.getPreviousHash())
+                return false;
+
+        }
+        return true;
+    }
 
 
 
     public Boolean mine(int nonce)
     {
-        Block lastBlock = getLastBlock();
-
-        Block newBlock=new Block(lastBlock.getIndex()+1,dateFormat.format(new Date()),Block.computeHash(lastBlock),0,getLastTransaction());
-        String proof=proofOfWork(newBlock);
-        addBlock(newBlock,proof);
-        unconfirmedTransactions.clear();
+        Block lastBlock = this.getLastBlock();
+        Block newBlock=new Block(lastBlock.getIndex()+1,dateFormat.format(new Date()),Block.computeHash(lastBlock),nonce,getLastTransaction());
+        String proof = this.proofOfWork(newBlock);
+        this.addBlock(newBlock,proof);
+        this.unconfirmedTransactions.clear();
         return true;
     }
 }

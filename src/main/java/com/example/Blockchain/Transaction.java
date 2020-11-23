@@ -1,3 +1,4 @@
+package com.example.Blockchain;
 public class Transaction {
     public String str;
 

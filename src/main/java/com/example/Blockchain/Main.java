@@ -1,3 +1,4 @@
+package com.example.Blockchain;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -9,7 +10,7 @@ public class Main {
         System.out.println("Hello");
         blockchain.createGenesisBlock();
         blockchain.addNewTransaction(new Transaction("T2"));
-        blockchain.mine(2);
+        boolean ans = blockchain.mine(2);
 
 
 
