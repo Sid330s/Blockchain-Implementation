@@ -23,7 +23,7 @@ public class Blockchain
         this.chain = chain;
     }
 
-    ArrayList<Block> chain = new ArrayList<Block>();
+    private ArrayList<Block> chain = new ArrayList<Block>();
 
     public Blockchain() {
         computedDifficultyString();
@@ -111,6 +111,8 @@ public class Blockchain
     public Boolean mine(int nonce)
     {
         Block lastBlock = this.getLastBlock();
+        if(unconfirmedTransactions.size()==0) return false;
+
         Block newBlock=new Block(lastBlock.getIndex()+1,dateFormat.format(new Date()),lastBlock.getHash(),nonce,getLastTransaction());
         String proof = this.proofOfWork(newBlock);
         this.addBlock(newBlock,proof);
