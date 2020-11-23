@@ -8,12 +8,21 @@ import java.util.Date;
 
 public class Blockchain
 {
-    private static int difficulty=3;
+    private static int difficulty=1;
     private static String difficultyString="";
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
 
-    ArrayList<Transaction> unconfirmedTransactions = new ArrayList<Transaction>();
+    private ArrayList<Transaction> unconfirmedTransactions = new ArrayList<Transaction>();
+
+    public ArrayList<Block> getChain() {
+        return chain;
+    }
+
+    public void setChain(ArrayList<Block> chain) {
+        this.chain = chain;
+    }
+
     ArrayList<Block> chain = new ArrayList<Block>();
 
     public Blockchain() {
@@ -31,10 +40,10 @@ public class Blockchain
     public boolean addBlock(Block block,String proof)
     {
         String previousHash = getLastBlock().getHash();
-        if (previousHash != block.getPreviousHash())
+        if (! previousHash.equals(block.getPreviousHash()))
             return false;
 
-        if (! this.isValidProof(block, proof)) return false;
+        if (this.isValidProof(block, proof)==false) return false;
 
         block.setHash(proof);
         chain.add(block);
@@ -56,7 +65,7 @@ public class Blockchain
         unconfirmedTransactions.add(transaction);
     }
 
-    String proofOfWork(Block block)
+    public String proofOfWork(Block block)
     {
         block.setNonce(0);
         String computedHash=Block.computeHash(block);
@@ -69,7 +78,6 @@ public class Blockchain
             computedHash=Block.computeHash(block);
             System.out.println(computedHash);
         }
-
         return computedHash;
     }
 
@@ -81,9 +89,9 @@ public class Blockchain
         }
     }
 
-    boolean isValidProof(Block block, String blockHash){
-        return (difficultyString.equals(blockHash.substring(0, difficulty)) &&
-        blockHash == block.computeHash(block));
+    boolean isValidProof(Block block, String proof){
+        return (difficultyString.equals(proof.substring(0, difficulty)) &&
+        proof.equals(block.computeHash(block)));
     }
 
     boolean checkChainValidity(ArrayList<Block> chain){
@@ -103,7 +111,7 @@ public class Blockchain
     public Boolean mine(int nonce)
     {
         Block lastBlock = this.getLastBlock();
-        Block newBlock=new Block(lastBlock.getIndex()+1,dateFormat.format(new Date()),Block.computeHash(lastBlock),nonce,getLastTransaction());
+        Block newBlock=new Block(lastBlock.getIndex()+1,dateFormat.format(new Date()),lastBlock.getHash(),nonce,getLastTransaction());
         String proof = this.proofOfWork(newBlock);
         this.addBlock(newBlock,proof);
         this.unconfirmedTransactions.clear();
