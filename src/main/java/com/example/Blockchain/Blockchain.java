@@ -11,9 +11,13 @@ public class Blockchain
     private static int difficulty=1;
     private static String difficultyString="";
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-
-
+    private ArrayList<Block> chain = new ArrayList<Block>();
     private ArrayList<Transaction> unconfirmedTransactions = new ArrayList<Transaction>();
+
+
+
+
+
 
     public ArrayList<Block> getChain() {
         return chain;
@@ -23,7 +27,7 @@ public class Blockchain
         this.chain = chain;
     }
 
-    private ArrayList<Block> chain = new ArrayList<Block>();
+
 
     public Blockchain() {
         computedDifficultyString();

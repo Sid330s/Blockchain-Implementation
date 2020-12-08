@@ -46,12 +46,18 @@ public class BlockchainApplication {
 	}
 
 	@GetMapping("/chain")
-	public ChainStatus get_chain() {
+	public String get_chain() {
         ChainStatus chainStatus = new ChainStatus();
         chainStatus.chain = blockchain.getChain();
         chainStatus.length = blockchain.getChain().size();
 		chainStatus.peers = peers;
-        return chainStatus;
+		GsonBuilder builder = new GsonBuilder();
+		Gson gson = builder.create();
+		String chainStatusDump = gson.toJson(chainStatus);
+
+
+
+        return chainStatusDump;
 	}
 
 	@PostMapping("/new_transaction")
