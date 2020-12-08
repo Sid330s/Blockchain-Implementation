@@ -1,9 +1,9 @@
 package com.example.Blockchain;
 
 public class NodeObject {
-    String node_address;
+    public String nodeAddress;
 
     public NodeObject(String node_address) {
-        this.node_address = node_address;
+        this.nodeAddress = node_address;
     }
 }

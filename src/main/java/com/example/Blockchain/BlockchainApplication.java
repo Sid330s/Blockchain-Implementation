@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.*;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
@@ -23,8 +24,19 @@ import java.util.Set;
 @SpringBootApplication
 @RestController
 public class BlockchainApplication {
+	@Value("${server.address}")
+	public static String serverAddress;
+
+	@Value("${server.port}")
+	public static String serverPort;
+
+	public String getHostUrl() {
+		return "http://" + BlockchainApplication.serverAddress + ":" + BlockchainApplication.serverPort+"/";
+	}
+
 	private static Blockchain blockchain ;
     public static Set<String> peers = new HashSet<>();
+
 
 
 
@@ -86,6 +98,49 @@ public class BlockchainApplication {
 		return String.format("Block %s is mined.", blockchain.getLastBlock().getIndex());
 	}
 
+	@PostMapping("/register_node")
+	public String register_new_peers(@org.springframework.web.bind.annotation.RequestBody  NodeObject nodeObject){
+
+		if (nodeObject.nodeAddress.isEmpty())
+			return "Empty Address";
+		peers.add(nodeObject.nodeAddress);
+		return get_chain();
+	}
+
+	@PostMapping("/register_with")
+	public  ResponseEntity<String> register_with_existing_node(@org.springframework.web.bind.annotation.RequestBody  NodeObject nodeObject) throws IOException {
+		System.out.println("NodeAddress:"+nodeObject.nodeAddress);
+		if (nodeObject.nodeAddress.isEmpty())
+			ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Invalid transaction data");
+		ObjectMapper mapper = new ObjectMapper();
+		OkHttpClient client = new OkHttpClient();
+		GsonBuilder builder = new GsonBuilder();
+		builder.setPrettyPrinting();
+		Gson gson = builder.create();
+
+
+
+		NodeObject nodeObject1 = new NodeObject(getHostUrl());
+		String requestString = gson.toJson(nodeObject1);
+
+		RequestBody requestBody = RequestBody.create(
+				MediaType.parse("application/json"), requestString);
+
+		Request request = new Request.Builder()
+				.url(nodeObject.nodeAddress)
+				.addHeader("Content-Type", "application/json")
+				.post(requestBody)
+				.build();
+
+		Response response = client.newCall(request).execute();
+		ChainStatus chainStatus = mapper.readValue(response.body().byteStream(), ChainStatus.class);
+
+		blockchain.setChain(chainStatus.chain);
+		peers=chainStatus.peers;
+
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body("Success");
+	}
+
 
 
 	boolean consensus() throws IOException {
@@ -100,7 +155,7 @@ public class BlockchainApplication {
 			OkHttpClient client = new OkHttpClient();
 			Request request = new Request.Builder()
 					.url(String.format("%schain",node))
-					.build(); // defaults to GET
+					.build();
 			Response response = client.newCall(request).execute();
 			ChainStatus chainStatus = mapper.readValue(response.body().byteStream(), ChainStatus.class);
 			int length = chainStatus.length;
@@ -111,7 +166,7 @@ public class BlockchainApplication {
 			}
 
 		}
-
+//mvn spring-boot:run -Dspring-boot.run.arguments=--server.port=8010
 
 
 		if (longest_chain.size()>0){
@@ -148,9 +203,5 @@ public class BlockchainApplication {
 		}
 
 	}
-
-
-
-
 
 }
