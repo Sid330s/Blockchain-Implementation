@@ -11,7 +11,7 @@ public class Main {
         System.out.println("Hello");
         blockchain.createGenesisBlock();
         System.out.println(blockchain.getChain().size());
-        blockchain.addNewTransaction(new Transaction("T2"));
+        blockchain.addNewTransaction(new Transaction("A5","C5"));
         boolean ans = blockchain.mine(2);
         if(ans) System.out.println("Yes");
         else System.out.println("No");

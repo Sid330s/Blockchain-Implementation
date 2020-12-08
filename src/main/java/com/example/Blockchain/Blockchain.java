@@ -32,7 +32,7 @@ public class Blockchain
 
     public void createGenesisBlock()
     {
-        Block GenesisBlock = new Block(0,dateFormat.format(new Date()),"Genesis",0,new Transaction("T1"));
+        Block GenesisBlock = new Block(0,dateFormat.format(new Date()),"Genesis",0,new Transaction("A0","Content0"));
         GenesisBlock.setHash(Block.computeHash(GenesisBlock));
         chain.add(GenesisBlock);
     }
