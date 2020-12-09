@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <title>Blockchain app</title>
+    </head>
+    <body>
+        <h1 style="text-align: center;">Welcome to Blockchain content writing app!</h1>
+        <div class="container">
+            <form action="/submit" method="POST">
+                <div class="form-group">
+                    <label for="content">Content:</label>
+                    <textarea class="form-control" name="content" rows="3" cols="50"></textarea>
+                </div>
+                <div class="form-group">
+                <label for="author">Author: </label>
+                <input type="text" class="form-control" name="author" placeholder="Enter your name!">
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-lg btn-primary ">Submit!</button>
+                    <a class="btn btn-primary  btn-lg" href="http://127.0.0.1:8080/mine" target="_blank" role="button">Mine</a>
+                    <a class="btn btn-primary  btn-lg" href="/" role="button">Resync</a>
+                </div>
+            </form>
+            <% data.chain.forEach(function(block){ %>
+                <div class="row">
+                    <div class="col-md-12">
+                        <strong><%= block.transaction.author%></strong>
+                        <span class="pull-right"><%=block.timeStamp%></span>
+                        <p> <%=block.transaction.content %></p>
+                    <% }) %>
+                    </div>
+                </div>
+         </div>
+         
+	</body>    
+</html>
