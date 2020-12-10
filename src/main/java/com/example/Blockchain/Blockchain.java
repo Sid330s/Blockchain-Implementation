@@ -36,15 +36,18 @@ public class Blockchain
 
     public void createGenesisBlock()
     {
-        Block GenesisBlock = new Block(0,dateFormat.format(new Date()),"Genesis",0,new Transaction("A0","Content0"));
+        Block GenesisBlock = new Block(0,dateFormat.format(new Date()),"Genesis",0,new Transaction("A0","Content0"),"-");
         GenesisBlock.setHash(Block.computeHash(GenesisBlock));
         chain.add(GenesisBlock);
     }
 
     public boolean addBlock(Block block,String proof)
     {
+        block.setHash("-");
         String previousHash = getLastBlock().getHash();
-        if (! previousHash.equals(block.getPreviousHash()))
+        System.out.println("Proof: "+proof+" "+"Blocks Hash: "+block.computeHash(block));
+        System.out.println("previousHash: "+previousHash+" "+"Blocks Prev: "+block.getPreviousHash());
+        if (previousHash.equals(block.getPreviousHash())==false)
             return false;
 
         if (this.isValidProof(block, proof)==false) return false;
@@ -117,7 +120,7 @@ public class Blockchain
         Block lastBlock = this.getLastBlock();
         if(unconfirmedTransactions.size()==0) return false;
 
-        Block newBlock=new Block(lastBlock.getIndex()+1,dateFormat.format(new Date()),lastBlock.getHash(),nonce,getLastTransaction());
+        Block newBlock=new Block(lastBlock.getIndex()+1,dateFormat.format(new Date()),lastBlock.getHash(),nonce,getLastTransaction(),"-");
         String proof = this.proofOfWork(newBlock);
         this.addBlock(newBlock,proof);
         this.unconfirmedTransactions.clear();

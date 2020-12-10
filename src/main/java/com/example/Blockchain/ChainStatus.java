@@ -6,5 +6,5 @@ import java.util.Set;
 public class ChainStatus {
     public int length;
     public ArrayList<Block> chain;
-    public static Set<String> peers;
+    public ArrayList<String> peers;
 }

@@ -21,11 +21,12 @@ public class Block {
 
 
 
-    public Block(int index, String timeStamp, String previousHash, int nonce,Transaction transaction) {
+    public Block(int index, String timeStamp, String previousHash, int nonce,Transaction transaction, String hash) {
         this.index = index;
         this.timeStamp = timeStamp;
         this.previousHash = previousHash;
         this.nonce = nonce;
+        this.hash = hash;
         this.transaction = transaction;
     }
 
