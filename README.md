@@ -31,15 +31,11 @@ The application should be up and running at [http://localhost:8000](http://local
 
 Here are a few screenshots
 
-1. Posting some content
+1. Posting some content and Requesting the node to mine
 
 ![Test Image 1](img/img1.png)
 
-2. Requesting the node to mine
-
-![Test Image 2](img/img2.png)
-
-3. Resyncing with the chain for updated data
+2. Resyncing with the chain for updated data
 
 ![Test Image 3](img/img3.png)
 
